@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
@@ -54,8 +54,8 @@ class CartController extends Controller
   }
 //   public function showByUser(User $user)
 //   {
-//     $products = $user->cart;
-//     return response(['data'=>$products]);
+    // $products = $user->cart;
+    // return response(['data'=>$products]);
 //   }
 
     public function showByUser(Request $request)

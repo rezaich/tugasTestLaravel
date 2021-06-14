@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Transaction;
+use App\Models\User;
 use Carbon\Carbon;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
@@ -43,5 +44,18 @@ class TransactionController extends Controller
          {
             return response(['success'=>false,'message'=>'the carts is empty']);
          }
+    }
+    // public function show(User $user)
+    // {
+    //     $transactions = $user->transaction;
+    //     return response(['data'=>$transactions]);
+    // }
+
+    public function show(Request $request)
+    {
+        $userId = $request->user()->id;
+
+        $transactions = Transaction::where(['user_id'=>$userId]) -> get();
+        return response(['data'=> $transactions]);
     }
 }

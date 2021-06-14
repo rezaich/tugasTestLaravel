@@ -36,7 +36,10 @@ Route::middleware('auth:api')->post('/v1/user/store',[UserController::class,'sto
 Route::middleware('auth:api')->put('/v1/user/update',[UserController::class ,'update']);
 
 //Category Controller
-Route::middleware('auth:api')->get('/v1/category',[CategoryController::class,'index']);
+// Route::middleware('auth:api')->get('/v1/category',[CategoryController::class,'index']);
+
+//CategoryController
+Route::middleware('auth:api')->apiResource('/v1/category', CategoryController::class);
 
 //Product Controller
 Route::middleware('auth:api')->get('/v1/products',[ProductController::class,'index']);
