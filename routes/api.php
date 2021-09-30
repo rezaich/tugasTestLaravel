@@ -6,8 +6,6 @@ use App\Http\Controllers\API\V1\LoginController;
 use App\Http\Controllers\api\v1\ProductController;
 use App\Http\Controllers\api\v1\TransactionController;
 use App\Http\Controllers\api\v1\UserController;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,13 +23,40 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::group(['prefix'=>'v1'],function(){
+Route::post('/login',[LoginController::class,'login']);
+Route::post('/register',[LoginController::class,'register']);
+
+// Route::middleware('auth:api')->post('/logout',[LoginController::class,'logout']);
+
+//authorization
+Route::group(
+    ['middleware'=>'auth:api'],
+function(){
+
 //Login Controller
-Route::post('/v1/login',[LoginController::class,'login']);
-Route::middleware('auth:api')->post('/v1/logout',[LoginController::class,'logout']);
-Route::post('/v1/register',[LoginController::class,'register']);
+Route::post('/logout',[LoginController::class,'logout']);
+
+//Route for admin
+Route::group([
+    'middleware'=> 'is_admin',
+    'as' => 'admin'
+],function(){
+    Route::get('/users',[
+        App\http\Controllers\API\v1\admin\UserController::class
+        ,
+        'index'
+    ]);
+});
+
+Route::group([
+    'as' => 'user'
+],function(){
+
+});
 
 //User Controller
-Route::middleware('auth:api')->get('/v1/user',[UserController::class,'show']);
+Route::middleware('auth:api')->get('user',[UserController::class,'show']);
 Route::middleware('auth:api')->post('/v1/user/store',[UserController::class,'store']);
 Route::middleware('auth:api')->put('/v1/user/update',[UserController::class ,'update']);
 
@@ -54,3 +79,6 @@ Route::middleware('auth:api')->get('/v1/cart/showByUser',[CartController::class,
 
 //transaction controller
 Route::middleware('auth:api')->get('/v1/transaction',[TransactionController::class,'store']);
+
+});
+});

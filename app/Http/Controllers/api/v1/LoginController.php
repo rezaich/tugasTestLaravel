@@ -4,14 +4,27 @@ namespace App\Http\Controllers\api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Dotenv\Validator;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
     public function login(Request $request)
     {
+
+        // $validator = FacadesValidator::make($request-> all(), [
+        //     'user_name' => 'required|unique:posts|min:6',
+        //     'password' => 'required|min:6',
+        // ],
+        // [
+        //     'user_name.required' => 'isi user name',
+        //     'password.required' => 'isi password'
+        // ])->validate();
+
         $user_name = $request->user_name;
         $password = $request -> password;
 
@@ -29,7 +42,7 @@ class LoginController extends Controller
         }
         else
         {
-            return response(['error'=>'email tidak tersedia'],401);
+            return response(['error'=>'user name tidak tersedia'],401);
         }
     }
 
@@ -48,6 +61,7 @@ class LoginController extends Controller
         $user ->name = $request -> name;
         $user ->user_name = $request -> user_name;
         $user ->password = Hash::make($request -> password);
+        $user ->is_admin = $request -> is_admin;
         $user ->api_token = null;
         $user -> save();
 
